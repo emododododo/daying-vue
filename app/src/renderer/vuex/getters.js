@@ -1,1 +1,3 @@
-export const mainCounter = state => state.counters.main
+export const url = state => {
+  return state.webview.url
+}
