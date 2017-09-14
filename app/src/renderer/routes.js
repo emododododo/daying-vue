@@ -13,6 +13,11 @@ export default [
     path: '/webview_view',
     name: 'webview-view',
     component: require('components/Webview')
+  },
+  {
+    path: '/webview_play',
+    name: 'webview-play',
+    component: require('components/WebviewPlay')
   }
   // {
   //   path: '*',
