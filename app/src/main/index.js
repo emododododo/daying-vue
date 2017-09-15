@@ -13,10 +13,12 @@ function createWindow (url, options) {
    * Initial window options
    */
   const loadURL = url || winURL
-  console.log(loadURL)
   mainWindow = new BrowserWindow(Object.assign({
     height: 600,
-    width: 800
+    width: 800,
+    webPreferences: {
+      plugins: true
+    }
   }, options))
 
   mainWindow.loadURL(loadURL)
@@ -28,25 +30,18 @@ function createWindow (url, options) {
   // eslint-disable-next-line no-console
   console.log('mainWindow opened')
 }
-// app.commandLine.appendSwitch('ppapi-flash-path', '/path/to/PepperFlashPlayer.plugin')
-
-// Specify flash version, for example, v17.0.0.169 设置版本号
-// app.commandLine.appendSwitch('ppapi-flash-version', '17.0.0.169')
-const libDirectory = path.join(__dirname, '../path')
 
 let ppapiFlashPath
-
 if (process.platform === 'win32') {
-  ppapiFlashPath = path.join(libDirectory, 'pepflashplayer.dll')
+  ppapiFlashPath = path.join(__dirname, './plugins/pepflashplayer.dll')
 } else if (process.platform === 'linux') {
-  ppapiFlashPath = path.join(libDirectory, 'libpepflashplayer.so')
+  ppapiFlashPath = path.join(__dirname, './plugins/libpepflashplayer.so')
 } else if (process.platform === 'darwin') {
-  ppapiFlashPath = path.join(libDirectory, 'PepperFlashPlayer.plugin')
+  ppapiFlashPath = path.join(__dirname, './plugins/PepperFlashPlayer.plugin')
 }
-console.log(ppapiFlashPath)
-app.commandLine.appendSwitch('ppapi-flash-path', ppapiFlashPath)
-app.commandLine.appendSwitch('ppapi-flash-version', '23.0.0.205')
 
+app.commandLine.appendSwitch('ppapi-flash-path', ppapiFlashPath)
+app.commandLine.appendSwitch('ppapi-flash-version', '27.0.0.130')
 app.on('ready', () => {
   createWindow()
 })
