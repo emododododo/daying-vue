@@ -3,6 +3,7 @@
     <webview
       :src="url"
       class="webview"
+      plugins="true"
     ></webview>
   </div>
 </template>
@@ -13,7 +14,8 @@
     created () {
       console.log(22222)
       console.log(this.$route.query.url)
-      this.url = `http://65yw.2m.vc/chaojikan.php?url=http://www.iqiyi.com/v_19rr8w99fw.html?src=focustext_1_20130410_1`
+      this.url = `http://000o.cc/jx/ty.php?url=${this.$route.query.url}`
+      // this.url = 'http://www.5ifxw.com/vip/'
     }
   }
 </script>
