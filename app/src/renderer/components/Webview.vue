@@ -1,25 +1,45 @@
 <template>
   <div>
-    <div class="nav">
-      <input type="text" name="" :value="url">
+    <div class="webview-bar">
+      <a @click="goHome" class='icon-wrapper active'>
+        <img class="icon_home" src="./assets/home.png" alt="" />
+      </a>
+      <a @click="goBack" class='icon-wrapper'>
+        <img class="icon_back" src="./assets/arrow_left.png" alt="" />
+      </a>
+      <a @click="goForward" class="icon-wrapper">
+        <img class="icon_forward" src="./assets/arrow_left.png" alt="" />
+      </a>
+      <a @click="onReload" class="icon-wrapper">
+        <img class="icon_reload" src="./assets/reload.png" alt="" />
+      </a>
+      <input type="text" name="" :value="inputValue">
     </div>
     <webview
       :src="url"
       class="webview"
       id="webview"
+      ref="webview"
     ></webview>
-    <button type="button" @click="test">Home</button>
-    <button type="button" style="margin-top: 30px;" @click="view">View</button>
+    <a type="button" class="play-button" style="margin-top: 30px;" @click="view">
+      <img src="./assets/triangle.png" alt="">
+    </a>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
   const services = require('electron').remote.getGlobal('services')
-  const webContents = require('electron').remote.getCurrentWebContents()
-  console.log(webContents.getURL())
+  // const webContents = require('electron').remote.getCurrentWebContents()
+  // console.log(webContents.getURL())
   console.log('mainWindow opened')
+  // console.log(playIcon)
   export default {
+    data () {
+      return {
+        inputValue: ''
+      }
+    },
     computed: {
       ...mapGetters({
         url: 'url'
@@ -27,14 +47,24 @@
     },
     name: 'webview-view',
     mounted () {
-      const webview = document.getElementById('webview')
+      this.inputValue = this.url
+      const webview = this.$refs.webview
       webview.addEventListener('new-window', (e) => {
         // 不允许跳转到新页面
         webview.loadURL(e.url)
       })
     },
     methods: {
-      test () {
+      goBack () {
+        this.$refs.webview.goBack()
+      },
+      goForward () {
+        this.$refs.webview.goForward()
+      },
+      onReload () {
+        this.$refs.webview.reload()
+      },
+      goHome () {
         this.$router.push({
           path: '/'
         })
@@ -52,34 +82,72 @@
   }
 </script>
 
-<style scoped>
-  img {
-    margin-top: -25px;
-    width: 450px;
-  }
-
-  .webview {
-    width: 100vw;
-    height: calc(100vh - 30px);
-    position: absolute;
-    top: 30px;
-    left: 0;
-  }
-
-  .nav {
-    position: absolute;
+<style scoped lang="scss">
+  .webview-bar {
+    position: fixed;
+    display: flex;
+    align-items: center;
     top: 0;
-    left: 0;
     height: 30px;
+    border-bottom: 1px solid #ccc;
+    width: 100vw;
+    background-color: #fff;
+    z-index: 100;
 
-    input {
-      width: 100%;
+    .icon-wrapper {
+      height: 18px;
+      opacity: .4;
+      margin: 0 8px;
+      img {
+        height: 18px;
+      }
+
+      &.active {
+        opacity: 1;
+      }
+      .icon_forward {
+        transform: rotate(180deg);
+      }
+
     }
+    input {
+      width: 70vw;
+    }
+  }
+  .webview {
+    margin-top: 30px;
+    width: 100vw;
+    height: 100vh;
+    overflow: scroll;
+    left: 0;
   }
 
   button {
     position: fixed;
     top: 50%;
     z-index: 1000;
+  }
+
+  .play-button {
+    position: fixed;
+    top: 50%;
+    z-index: 1000;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: rgb(306, 106, 48);
+    box-shadow: 0px 0px 1px 1px #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+      background-color: #1afa29;
+    }
+    img {
+      width: 24px;
+      height: 24px;
+      transform: rotate(-90deg);
+    }
   }
 </style>
