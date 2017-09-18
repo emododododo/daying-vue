@@ -14,8 +14,8 @@ function createWindow (url, options) {
    */
   const loadURL = url || winURL
   mainWindow = new BrowserWindow(Object.assign({
-    height: 600,
-    width: 800,
+    height: 640,
+    width: 980,
     webPreferences: {
       plugins: true
     }
