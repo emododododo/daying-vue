@@ -1,19 +1,27 @@
 <template>
   <div>
     <div class="webview-bar">
-      <a @click="goHome" class='icon-wrapper active'>
+      <a @click="goHome" class="icon-wrapper active">
         <img class="icon_home" src="./assets/home.png" alt="" />
       </a>
-      <a @click="goBack" class='icon-wrapper'>
+      <a @click="goBack" class="icon-wrapper" :class="{
+        active: canGoBack
+      }">
         <img class="icon_back" src="./assets/arrow_left.png" alt="" />
       </a>
-      <a @click="goForward" class="icon-wrapper">
+      <a @click="goForward" class="icon-wrapper" :class="{
+        active: canGoForward
+      }">
         <img class="icon_forward" src="./assets/arrow_left.png" alt="" />
       </a>
-      <a @click="onReload" class="icon-wrapper">
+      <a @click="onReload" class="icon-wrapper active">
         <img class="icon_reload" src="./assets/reload.png" alt="" />
       </a>
       <input type="text" name="" :value="inputValue">
+      <a @click="vipView" class="icon-wrapper active">
+        <img class="icon_reload" src="./assets/vip.png" alt="" />
+        <== 破解
+      </a>
     </div>
     <webview
       :src="url"
@@ -21,9 +29,6 @@
       id="webview"
       ref="webview"
     ></webview>
-    <a type="button" class="play-button" style="margin-top: 30px;" @click="view">
-      <img src="./assets/triangle.png" alt="">
-    </a>
   </div>
 </template>
 
@@ -37,7 +42,9 @@
   export default {
     data () {
       return {
-        inputValue: ''
+        inputValue: '',
+        canGoBack: false,
+        canGoForward: false
       }
     },
     computed: {
@@ -52,6 +59,16 @@
       webview.addEventListener('new-window', (e) => {
         // 不允许跳转到新页面
         webview.loadURL(e.url)
+      })
+      webview.addEventListener('did-navigate', () => {
+        const canGoBack = webview.canGoBack()
+        const canGoForward = webview.canGoForward()
+        if (this.canGoBack !== canGoBack) {
+          this.canGoBack = canGoBack
+        }
+        if (this.canGoForward !== canGoForward) {
+          this.canGoForward = canGoForward
+        }
       })
     },
     methods: {
@@ -69,7 +86,7 @@
           path: '/'
         })
       },
-      view () {
+      vipView () {
         const webviewElement = document.getElementById('webview')
         console.log(webviewElement.getURL())
         const url = encodeURIComponent(webviewElement.getURL())
