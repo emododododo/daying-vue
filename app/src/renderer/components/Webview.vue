@@ -91,8 +91,8 @@
         console.log(webviewElement.getURL())
         const url = encodeURIComponent(webviewElement.getURL())
         services.createWindow(`${services.winURL}/#/webview_play?url=${url}`, {
-          height: 300,
-          width: 400
+          height: 600,
+          width: 800
         })
       }
     }
